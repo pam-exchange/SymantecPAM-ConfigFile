@@ -28,8 +28,8 @@ It is important that the numbers does not conflict with any other numbers from o
 If this is set to `true` when compiling the connector, additional debugging information may be written to the
 `catalina.out` log file. If it is written will depend on the loglevel for the connector as
 defined in the Tomcat `logging.properties` file. If extended debugging is enabled at compile time,
-additional information including current and new passwords is shown in the `catalina.out` log file. This
-should not be enabled when compiling the connector for a production environment.
+additional information including current and new passwords may be visible in the `catalina.out` log file.
+This should not be enabled when compiling the connector for a production environment.
 - Run the command `mvnw package` to compile the connector.
 - Copy the target connector `configfile.war` to the Tomcat `webapps_targetconnector` directory.
 - It is recommended to enable logging from the connector by adding the following to the
@@ -60,17 +60,14 @@ file is not escaped.
 
 The fields used are:
 
-- Config file location
-  
+- Config file location  
 This can be `Local TCF`, `Remote UNIX` or `Remote Windows`. Set the radio button
 accordingly.
 
-- Linux port
-  
+- Linux port  
 This is the port used when establishing an SSH connection to a remote UNIX server.
 
-- Login account domain
-  
+- Login account domain  
 If the login account (on the account page) uses a domain account, specify the
 domain for the account here. If the account is local to the server, the fields
 can be left blank.
@@ -84,14 +81,12 @@ is an account configured in PAM. It can be a domain or local account.
 
 The fields used are:
 
-- Account for login to remote server
-  
+- Account for login to remote server    
 If the application uses a remote Windows or UNIX system, select an account with
 login permissions to the remote server. The account must have read/write permissions
 to the file specified.
 
-- Config file
-  
+- Config file    
 Specify the path + filename for the configuration file.
 For Windows servers the protocol used is SMB and you must specify a share/path to the file.
 This can be `/c$/tmp/tomcat-users.xml` or any other network share on the server.
@@ -100,31 +95,26 @@ The login account must have read/write permissions to the path and file.
 For files on the local TCF server, specify the path+filename. The account running Tomcat
 must have read/write permissions to the path and file.
 
-- Create backup file
-  
+- Create backup file    
 If this is checked a backup of the configuration file is created. The login account
 must have permissions to create a new file in the path for the configuration file.
 
-- Use Regex in search
-  
+- Use Regex in search    
 This will enable use of regex in verify, search and replace of password in the configuration
 file. If this is not enabled a simple text search for the current password is used. The password
 update will search for the current password (exact match) and replace it with a new password.
 
-- Verify regex
-  
+- Verify regex    
 This is the regex used to verify if the configuration file has the correct password.
 The username of the account is specified as `$USERNAME$` (upper case). The password of the
 account is specified as `$PASSWORD$` (upper case). Both will be replaces with the account
 username and current password.
 
-- Update regex (search)
-  
+- Update regex (search)    
 This is the regex used with identifying where in the configuration file the username/password
 is to be found. Use `()` to group the search. They are used in the replace regex.
 
-- Update regex (replace)
-  
+- Update regex (replace)    
 This is the regex used when replacing the password. It uses the groups found in the search
 regex.
 
