@@ -1,0 +1,96 @@
+{
+   "application": {
+        "uiDefinition": {
+            "tabs": [{
+                "id": "ConfigFileAppDetail",
+                "label": "Config File",
+                "fields": [{
+                    "type": "RADIO",
+                    "field": "location",
+                    "label": "Config file location",
+                    "value": "local",
+                    "values": [{
+                         "label": "Local TCF",
+                         "value": "local"
+                    	},{
+                         "label": "Remote UNIX",
+                         "value": "remoteUNIX"
+                    	},{
+                         "label": "Remote Windows",
+                         "value": "remoteWindows"
+                    }]
+                }, {
+                    "type": "NUMBER",
+                    "field": "port",
+                    "label": "Linux port",
+                    "required": false,
+                    "minValue": 0,
+                    "maxValue": 65535,
+                    "value": 22
+                }, {
+                    "type": "TEXT",
+                    "field": "domain",
+                    "label": "Login account domain",
+                    "required": false,
+                    "maxLength": 64,
+                    "patternConstraint": "^[A-Za-z0-9.-_]+$",
+                    "patternConstraintMessage": "Domain name must consists of letters, numbers, '.', '-' or '_' only"
+                }]
+                
+            }]
+        }
+    },
+    
+    "account": {
+        "uiDefinition": {
+            "tabs": [{
+                "id": "ConfigFileAccDetail",
+                "label": "Config File",
+                "fields": [{
+                    "type": "TARGETACCOUNT",
+					"field": "loginAccount",
+					"label": "Account for login to remote server",
+					"required": false
+	            }, {
+                    "type": "TEXT",
+                    "field": "filename",
+                    "label": "Config file (path+) filename",
+                    "required": true,
+                    "maxLength": 120,
+                    "value": "/var/config/config.txt"
+            	}, {
+                    "type": "CHECKBOX",
+                    "field": "createBackup",
+                    "label": "Create backup file",
+                    "value": true
+                }, {
+                    "type": "CHECKBOX",
+                    "field": "useRegex",
+                    "label": "Use Regex in search",
+                    "value": false
+                }, {
+                    "type": "TEXT",
+                    "field": "verifyRegex",
+                    "label": "Verify regex",
+                    "value": "username\\s*=\\s*\"$USERNAME$\"\\s+password\\s*=\\s*\"$PASSWORD$\"",
+                    "required": false,
+                    "maxLength": 120
+                }, {
+                    "type": "TEXT",
+                    "field": "searchRegex",
+                    "label": "Update regex (search)",
+                    "value" : "(username\\s*=\\s*\"$USERNAME$\"\\s+password\\s*=\\s*\").*?(\")",
+                    "required": false,
+                    "maxLength": 120
+                }, {
+                    "type": "TEXT",
+                    "field": "replaceRegex",
+                    "label": "Update regex (replace)",
+                    "value": "$1$PASSWORD$$2",
+                    "required": false,
+                    "maxLength": 120
+                }]
+            }]
+        }
+    }
+ }
