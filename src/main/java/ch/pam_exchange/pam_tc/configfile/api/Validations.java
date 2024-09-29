@@ -69,7 +69,7 @@ public class Validations {
 
   private static final Logger LOGGER = Logger.getLogger(Validations.class.getName());
   
-  private ExtensionException exception;
+//  private ExtensionException exception;
   
   @POST
   @Path("/{validationType}")
@@ -212,6 +212,7 @@ public class Validations {
     * @param isSuccess
     * @param args
     */
+/*
    private void buildException(String messageCode, boolean isSuccess, String... args) {
        if(null == exception) {
                exception = new ExtensionException(messageCode,isSuccess,args);
@@ -220,7 +221,7 @@ public class Validations {
                exception.updateSuccess(isSuccess);
        }
    }
-
+*/
    /**
    * This method must implemented to add any custom validations of 
    * account extended attributes in addition to those that are defined in 

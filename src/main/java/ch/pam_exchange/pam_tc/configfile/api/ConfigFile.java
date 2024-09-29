@@ -1,6 +1,5 @@
 package ch.pam_exchange.pam_tc.configfile.api;
 
-import com.ca.pam.extensions.core.util.MessageConstants;
 import com.ca.pam.extensions.core.api.exception.ExtensionException;
 import com.ca.pam.extensions.core.model.LoggerWrapper;
 
@@ -53,8 +52,6 @@ public class ConfigFile {
 	private String newPassword = "";
 	private String hostname = "";
 	private int port = DEFAULT_PORT;
-	private MasterAccount loginAccount = null;
-	// private MasterAccount searchAccount= null;
 	private String loginUsername = "";
 	private String loginPassword = "";
 	private String domain = "";
@@ -85,39 +82,36 @@ public class ConfigFile {
 		LOGGER.fine(LoggerWrapper.logMessage(FIELD_LOCATION + "= " + this.location));
 
 		if (LOCATION_REMOTEWINDOWS.equals(this.location) || LOCATION_REMOTEUNIX.equals(this.location)) {
+			/*
+			 * Hostname
+			 */
 			this.hostname = targetAccount.getTargetApplication().getTargetServer().getHostName();
 			LOGGER.fine(LoggerWrapper.logMessage("hostname= " + this.hostname));
-			try {
-				this.port = Integer
-						.parseUnsignedInt(targetAccount.getTargetApplication().getExtendedAttribute(FIELD_PORT));
-			} catch (Exception e) {
-				LOGGER.warning("Using default port");
-				this.port = DEFAULT_PORT;
-			}
-			LOGGER.fine(LoggerWrapper.logMessage(FIELD_PORT + "= " + this.port));
 
-			this.domain = targetAccount.getTargetApplication().getExtendedAttribute(FIELD_DOMAIN);
-			LOGGER.fine(LoggerWrapper.logMessage(FIELD_DOMAIN + "= " + this.domain));
-
-			this.loginAccount = targetAccount.getMasterAccount(FIELD_LOGINACCOUNT);
+			/*
+			 * Domain - can be empty
+			 */
+			this.domain = targetAccount.getExtendedAttribute(FIELD_DOMAIN);
+			LOGGER.fine(LoggerWrapper.logMessage(FIELD_DOMAIN + "= '" + this.domain+"'"));
+			
+			/*
+			 * Login account to remote 
+			 */
+			MasterAccount loginAccount = targetAccount.getMasterAccount(FIELD_LOGINACCOUNT);
+			
+			/*
+			 * login username from loginAccount
+			 */
 			this.loginUsername = loginAccount.getUserName();
 			if (this.loginUsername == null || this.loginUsername.isEmpty()) {
 				LOGGER.severe(LoggerWrapper.logMessage("loginUsername is empty"));
 			} else {
 				LOGGER.fine(LoggerWrapper.logMessage("loginUsername= " + this.loginUsername));
-
-				if (LOCATION_REMOTEUNIX.equals(this.location) && this.domain.length() > 0) {
-					// if remote system is UNIX and domain is used, build the domain
-					// loginAccount
-
-					if (this.domain.contains(".")) {
-						this.loginUsername = this.loginUsername + "@" + this.domain;
-					} else {
-						this.loginUsername = this.domain + "\\" + this.loginUsername;
-					}
-					LOGGER.fine("Updated loginUsername= " + this.loginUsername);
-				}
 			}
+
+			/*
+			 * login password from loginAccount
+			 */
 			this.loginPassword = loginAccount.getPassword();
 			if (this.loginPassword == null || this.loginPassword.isEmpty()) {
 				LOGGER.severe(LoggerWrapper.logMessage("loginPassword is empty"));
@@ -126,14 +120,43 @@ public class ConfigFile {
 					LOGGER.fine(LoggerWrapper.logMessage("loginPassword= " + this.loginPassword));
 			}
 
-			// searchAccount= targetAccount.getMasterAccount("searchAccount");
-			// LOGGER.info("searchUsername= "+searchAccount.getUserName());
-			// LOGGER.info("searchPassword= "+searchAccount.getPassword());
+			/*
+			 * Additional settings for RemoteUNIX 
+			 */
+			if (LOCATION_REMOTEUNIX.equals(this.location)) {
+				try {
+					this.port = Integer
+							.parseUnsignedInt(targetAccount.getTargetApplication().getExtendedAttribute(FIELD_PORT));
+				} catch (Exception e) {
+					LOGGER.warning("Using default port");
+					this.port = DEFAULT_PORT;
+				}
+				LOGGER.fine(LoggerWrapper.logMessage(FIELD_PORT + "= " + this.port));
+
+				if (!(this.domain == null || this.domain.isEmpty())) {
+					/*
+					 * Domain is available. Check if it is short/long format
+					 * and update the loginUsername accordingly.
+					 */
+					if (this.domain.contains(".")) {
+						this.loginUsername = this.loginUsername + "@" + this.domain;
+					} else {
+						this.loginUsername = this.domain + "\\" + this.loginUsername;
+					}
+					LOGGER.fine("Updated loginUsername= " + this.loginUsername);
+				}
+			}
 		}
 
+		/*
+		 * ConfigFile path+filename
+		 */
 		this.filename = targetAccount.getExtendedAttribute(FIELD_FILENAME).replace("\\", "/");
 		LOGGER.fine(LoggerWrapper.logMessage(FIELD_FILENAME + "= " + this.filename));
 
+		/*
+		 * Is a backup file required
+		 */
 		this.createBackup = "true".equals(targetAccount.getExtendedAttribute(FIELD_CREATEBACKUP));
 		LOGGER.fine(LoggerWrapper.logMessage(FIELD_CREATEBACKUP + "= " + this.createBackup));
 

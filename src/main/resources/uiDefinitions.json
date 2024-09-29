@@ -7,40 +7,33 @@
                 "fields": [{
                     "type": "RADIO",
                     "field": "location",
-                    "label": "Config file location",
+                    "label": "Location of config file",
                     "value": "local",
                     "values": [{
-                         "label": "Local TCF",
-                         "value": "local"
-                    	},{
                          "label": "Remote UNIX",
                          "value": "remoteUNIX"
                     	},{
                          "label": "Remote Windows",
                          "value": "remoteWindows"
-                    }]
+                        },{
+                         "label": "Local TCF",
+                         "value": "local"
+                    	}
+                    ]
                 }, {
                     "type": "NUMBER",
                     "field": "port",
-                    "label": "Linux port",
+                    "label": "Port (for Remote UNIX)",
                     "required": false,
                     "minValue": 0,
                     "maxValue": 65535,
                     "value": 22
-                }, {
-                    "type": "TEXT",
-                    "field": "domain",
-                    "label": "Login account domain",
-                    "required": false,
-                    "maxLength": 64,
-                    "patternConstraint": "^[A-Za-z0-9.-_]+$",
-                    "patternConstraintMessage": "Domain name must consists of letters, numbers, '.', '-' or '_' only"
                 }]
-                
+
             }]
         }
     },
-    
+
     "account": {
         "uiDefinition": {
             "tabs": [{
@@ -49,15 +42,23 @@
                 "fields": [{
                     "type": "TARGETACCOUNT",
 					"field": "loginAccount",
-					"label": "Account for login to remote server",
+					"label": "Login account to remote server",
 					"required": false
 	            }, {
+                    "type": "TEXT",
+                    "field": "domain",
+                    "label": "Domain for login account",
+                    "required": false,
+                    "maxLength": 64,
+                    "patternConstraint": "^[A-Za-z0-9.-_]+$",
+                    "patternConstraintMessage": "Domain name must consists of letters, numbers, '.', '-' or '_' only"
+                }, {
                     "type": "TEXT",
                     "field": "filename",
                     "label": "Config file (path+) filename",
                     "required": true,
                     "maxLength": 120,
-                    "value": "/var/config/config.txt"
+                    "value": "/tmp/config.txt"
             	}, {
                     "type": "CHECKBOX",
                     "field": "createBackup",
@@ -66,7 +67,7 @@
                 }, {
                     "type": "CHECKBOX",
                     "field": "useRegex",
-                    "label": "Use Regex in search",
+                    "label": "Use Regex for verify/update",
                     "value": false
                 }, {
                     "type": "TEXT",

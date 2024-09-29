@@ -19,17 +19,17 @@ import com.ca.pam.extensions.core.model.ExtensionResponse;
 import com.ca.pam.extensions.core.util.MessageConstants;
 import com.ca.pam.extensions.core.api.exception.ExtensionException;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
+//import java.io.IOException;
+//import java.util.Iterator;
+//import java.util.List;
+//import java.util.ArrayList;
+//import java.util.Arrays;
+//import java.util.Map;
+//import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jakarta.ws.rs.PathParam;
+//import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -37,26 +37,26 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONObject;
+//import org.codehaus.jettison.json.JSONObject;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.core.JsonParseException;
+//import com.fasterxml.jackson.core.type.TypeReference;
+//import com.fasterxml.jackson.databind.JsonMappingException;
+//import com.fasterxml.jackson.databind.JsonNode;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.ca.pam.extensions.core.Account;
-import com.ca.pam.extensions.core.Application;
+//import com.ca.pam.extensions.core.Account;
+//import com.ca.pam.extensions.core.Application;
 import com.ca.pam.extensions.core.ConnectorJSONUtil;
-import com.ca.pam.extensions.core.Tab;
-import com.ca.pam.extensions.core.FieldObject;
-import com.ca.pam.extensions.core.util.UIDefinitionManager;
-import com.ca.pam.extensions.core.TargetServer;
-import com.ca.pam.extensions.core.TargetApplication;
+//import com.ca.pam.extensions.core.Tab;
+//import com.ca.pam.extensions.core.FieldObject;
+//import com.ca.pam.extensions.core.util.UIDefinitionManager;
+//import com.ca.pam.extensions.core.TargetServer;
+//import com.ca.pam.extensions.core.TargetApplication;
 import com.ca.pam.extensions.core.TargetAccount;
 import com.ca.pam.extensions.core.model.LoggerWrapper;
 
-import ch.pam_exchange.pam_tc.configfile.api.ConfigFile;
+//import ch.pam_exchange.pam_tc.configfile.api.ConfigFile;
 
 /**
  * Service class that handles request for verifying and updating credentials
@@ -97,8 +97,8 @@ import ch.pam_exchange.pam_tc.configfile.api.ConfigFile;
 public class Credentials {
 
    private static final Logger LOGGER = Logger.getLogger(Credentials.class.getName());
-   private ExtensionException efe = null;
-   private String durationLogString = "Duration of {0}call to {1} method";
+//   private ExtensionException efe = null;
+//   private String durationLogString = "Duration of {0}call to {1} method";
 
    /**
    * Service method that serves credential validation request. 
@@ -115,6 +115,8 @@ public class Credentials {
    @Produces(MediaType.APPLICATION_JSON)
    public Response credentialsValidate(String json) {
 
+	  LOGGER.fine(LoggerWrapper.logMessage("JSON= "+json));
+	   
       String duration;
       final long methodStartTime = System.currentTimeMillis();
       long methodEndTime;
@@ -182,7 +184,9 @@ public class Credentials {
    @Consumes(MediaType.TEXT_PLAIN)
    @Produces(MediaType.APPLICATION_JSON)
    public Response credentialsUpdate(String json) {
-      ExtensionResponse response = null;
+	  LOGGER.fine(LoggerWrapper.logMessage("JSON= "+json));
+
+	  ExtensionResponse response = null;
       String duration;
       final long methodStartTime = System.currentTimeMillis();
       long methodEndTime;
