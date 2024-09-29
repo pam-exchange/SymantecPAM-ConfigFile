@@ -90,7 +90,7 @@ the domain is the **hostname**.
 - Config file (path+) filename    
 Specify the path + filename for the configuration file.
 For Windows servers the protocol used is SMB and you must specify a share/path to the file.
-This can be `/c$/tmp/tomcat-users.xml` or any other network share on the server.
+This can be `c$/tmp/tomcat-users.xml` or any other network share on the server.
 For UNIX servers just specify the path and filename for the configuration file.
 The login account must have read/write permissions to the path and file.
 For files on the local TCF server, specify the path+filename. The account running Tomcat
@@ -123,7 +123,7 @@ account is specified as `$PASSWORD$` (upper case). Both will be replaces with th
 username and new password.
 
 
-## Example configuraiton file
+## Example configuration file
 
 The example used to test the connector is a tomcat-users.xml file. It is available
 on a remote Windows, remote Linux and locally on the TCF server.
