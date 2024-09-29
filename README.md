@@ -9,6 +9,22 @@ configuration files.
 
 This connector will allow password verify and update for users defined configuration files.
 
+The connector copies the configuration file to the TCF server into the Tomcat temp directory.  
+For a verify operation this now local file is inspected and it is validated if the
+current password is found in the file.  
+For an update operation a backup file is sent to the originating server (remote or local). This
+is a copy of the original configuration file with a new filename. For simple match (without  Regex)
+the current password is located in the file and replaced with a new password. 
+For Regex search/replace the given regex for search is used to identify where the 
+username/password is located. It is then replaced using the regex for replace. 
+If the regex for search/replace is done correctly, it will allow update of the password in the 
+configuration file even when the current password (in file) is not known 
+to PAM. The updated file is send to the remote server.  
+Finally, the temporary file on the TCF server is deleted.
+
+## Build ConfigFile connector
+
+### Environment
 The environment used is as follows:
 
 - CentOS 9 (with SELINUX)
@@ -17,8 +33,7 @@ The environment used is as follows:
 - Symantec PAM, version 4.2.0.826
 - capamextensioncore, version 4.21.0.82
 
-## Installation
-
+### Installation
 - Download the project sources from GitHub.
 - Add the `capamextensioncore.jar` from Symantec PAM as part of local Maven repository.
 - Edit the files `configfile_messages.properties` and `ConfigFileMessageConstants.java`
