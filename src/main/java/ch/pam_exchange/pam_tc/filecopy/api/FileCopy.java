@@ -103,7 +103,7 @@ public class FileCopy {
 	 */
 	public void copyFromRemote(String src, String dst) throws ExtensionException {
 		
-		LOGGER.fine(LoggerWrapper.logMessage("src='"+src+"' dst='"+dst+"'"));
+		LOGGER.fine(LoggerWrapper.logMessage("Copy file: "+src+" --> "+dst));
 		
 		if (isWindowsPlatform) {
 			copyFromRemoteWindows(src,dst);
@@ -120,7 +120,7 @@ public class FileCopy {
 		OutputStream out= null;
 		SmbFileInputStream inp= null;
 
-		LOGGER.fine(LoggerWrapper.logMessage("src='"+src+"' dst='"+dst+"'"));
+		LOGGER.fine(LoggerWrapper.logMessage("Copy file: "+src+" --> "+dst));
 		try {
 			BaseContext baseCxt = null;
 			Properties jcifsProperties  = new Properties();
@@ -173,7 +173,7 @@ public class FileCopy {
 		ChannelSftp sftp= null;
 		Session session= null;
 		
-		LOGGER.fine(LoggerWrapper.logMessage("src="+src+" dst="+dst));
+		LOGGER.fine(LoggerWrapper.logMessage("Copy file: "+src+" --> "+dst));
 		try {
 			if (jsch==null) {
 				LOGGER.fine(LoggerWrapper.logMessage("hostname="+hostname+" port="+port+" username="+username+" password=*****"));
@@ -187,7 +187,7 @@ public class FileCopy {
 			    sftp= (ChannelSftp) channel;
 			}
 		    
-			LOGGER.info(LoggerWrapper.logMessage("sftp.get, src='"+src+"' dst='"+dst+"'"));
+			LOGGER.info(LoggerWrapper.logMessage("sftp.get, "+src+" --> "+dst));
 			sftp.get(src,dst);
 		    
 	    } 
@@ -230,7 +230,6 @@ public class FileCopy {
 	 * copy to remote server
 	 */
 	public void copyToRemote(String src, String dst) throws ExtensionException {
-		LOGGER.fine(LoggerWrapper.logMessage("src="+src+" dst="+dst));
 		if (isWindowsPlatform) {
 			copyToRemoteWindows(src,dst);
 		} 
@@ -245,7 +244,7 @@ public class FileCopy {
 		SmbFileOutputStream out= null;
 		InputStream inp= null;
 		
-		LOGGER.fine("src="+src+" dst="+dst);
+		LOGGER.fine(LoggerWrapper.logMessage("Copy file: "+src+" --> "+dst));
 		try {
 			BaseContext baseCxt = null;
 			Properties jcifsProperties  = new Properties();
@@ -299,7 +298,7 @@ public class FileCopy {
 		ChannelSftp sftp= null;
 		Session session= null;
 		
-		LOGGER.fine(LoggerWrapper.logMessage("src="+src+" dst="+dst));
+		LOGGER.fine(LoggerWrapper.logMessage("Copy file: "+src+" --> "+dst));
 		try {
 			LOGGER.fine(LoggerWrapper.logMessage("hostname="+this.hostname+" port="+this.port+" username="+this.username+" password=*****"));
 			session= jsch.getSession(this.username, this.hostname, this.port);
@@ -310,7 +309,7 @@ public class FileCopy {
 		    channel.connect();
 		    sftp= (ChannelSftp) channel;
 		    
-			LOGGER.info(LoggerWrapper.logMessage("sftp.put, src='"+src+"' dst='"+dst+"'"));
+			LOGGER.info(LoggerWrapper.logMessage("sftp.put, "+src+" --> "+dst));
 		    sftp.put(src,dst);
 		    
 	    } 
@@ -360,7 +359,7 @@ public class FileCopy {
 		InputStream inp= null;
 		OutputStream out= null;
 		
-		LOGGER.fine(LoggerWrapper.logMessage("src="+src+" dst="+dst));
+		LOGGER.fine(LoggerWrapper.logMessage("Copy file: "+src+" --> "+dst));
 		try {
 	        inp= new FileInputStream(src);
 			out= new FileOutputStream(dst);
@@ -369,7 +368,6 @@ public class FileCopy {
 	        	LOGGER.fine(LoggerWrapper.logMessage("inp.read length="+length));
 	        	out.write(buffer, 0, length);
 	        }
-	        
 		} 
 		catch (java.io.FileNotFoundException e) {
 	        LOGGER.severe(LoggerWrapper.logMessage("File not found. '"+src+"'"));
