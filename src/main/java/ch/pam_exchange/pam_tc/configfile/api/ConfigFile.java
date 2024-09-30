@@ -42,6 +42,9 @@ public class ConfigFile {
 	private static final String FIELD_SEARCHREGEX = "searchRegex";
 	private static final String FIELD_REPLACEREGEX = "replaceRegex";
 
+	private static final String FIELD_EXTENSIONTYPE= "extensionType";
+	private static final String EXTENSIONTYPE_ACTIVEDIRECTORY= "windowsDomainService";
+
 	/*
 	 * Instance variables used in the processCredentialsVerify and
 	 * processCredentialsUpdate
@@ -89,15 +92,22 @@ public class ConfigFile {
 			LOGGER.fine(LoggerWrapper.logMessage("hostname= " + this.hostname));
 
 			/*
-			 * Domain - can be empty
-			 */
-			this.domain = targetAccount.getExtendedAttribute(FIELD_DOMAIN);
-			LOGGER.fine(LoggerWrapper.logMessage(FIELD_DOMAIN + "= '" + this.domain+"'"));
-			
-			/*
 			 * Login account to remote 
 			 */
-			MasterAccount loginAccount = targetAccount.getMasterAccount(FIELD_LOGINACCOUNT);
+			TargetAccount loginAccount = targetAccount.getMasterAccount(FIELD_LOGINACCOUNT).getAsTargetAccount();
+			
+			/*
+			 * Find domain through Application for loginAccount
+			 */
+			String loginAccountType= loginAccount.getTargetApplication().getExtendedAttribute(FIELD_EXTENSIONTYPE);
+			LOGGER.fine(LoggerWrapper.logMessage(FIELD_EXTENSIONTYPE + "= " + loginAccountType));
+			
+			if (EXTENSIONTYPE_ACTIVEDIRECTORY.equals(loginAccountType)) {
+				this.domain= loginAccount.getTargetApplication().getExtendedAttribute(EXTENSIONTYPE_ACTIVEDIRECTORY);
+			} else {
+				this.domain= this.hostname;
+			}
+			LOGGER.fine(LoggerWrapper.logMessage(FIELD_DOMAIN + "= '" + this.domain+"'"));
 			
 			/*
 			 * login username from loginAccount
@@ -133,10 +143,10 @@ public class ConfigFile {
 				}
 				LOGGER.fine(LoggerWrapper.logMessage(FIELD_PORT + "= " + this.port));
 
-				if (!(this.domain == null || this.domain.isEmpty())) {
+				if (EXTENSIONTYPE_ACTIVEDIRECTORY.equals(loginAccountType)) {
 					/*
-					 * Domain is available. Check if it is short/long format
-					 * and update the loginUsername accordingly.
+					 * LoginAccount is a domain account. 
+					 * Check if it is short/long format and update the loginUsername accordingly.
 					 */
 					if (this.domain.contains(".")) {
 						this.loginUsername = this.loginUsername + "@" + this.domain;
@@ -226,7 +236,6 @@ public class ConfigFile {
 			LOGGER.fine(LoggerWrapper.logMessage("tmpFilename= " + tmpFilename));
 
 			fc.copyFromRemote(filename, tmpFilename);
-			LOGGER.fine(LoggerWrapper.logMessage("File copy complete"));
 		}
 
 		/*
@@ -333,7 +342,6 @@ public class ConfigFile {
 					String backupFilename = fc.getBackupFilename(this.filename);
 					LOGGER.fine(LoggerWrapper.logMessage("backupFilename= " + backupFilename));
 					fc.copyLocal(tmpFilename, backupFilename);
-					LOGGER.info(LoggerWrapper.logMessage("Backup copy complete - " + backupFilename));
 				}
 			}
 
@@ -347,13 +355,11 @@ public class ConfigFile {
 			tmpFilename = fc.getTempFilename().replace("\\", "/");
 			LOGGER.fine(LoggerWrapper.logMessage("tmpFilename= " + tmpFilename));
 			fc.copyFromRemote(filename, tmpFilename);
-			LOGGER.fine(LoggerWrapper.logMessage("File copy complete"));
 
 			if (this.createBackup) {
 				String backupFilename = fc.getBackupFilename(this.filename);
 				LOGGER.fine(LoggerWrapper.logMessage("backupFilename= " + backupFilename));
 				fc.copyToRemote(tmpFilename, backupFilename);
-				LOGGER.info(LoggerWrapper.logMessage("Backup copy complete - " + backupFilename));
 			}
 		}
 
@@ -382,6 +388,7 @@ public class ConfigFile {
 						LOGGER.fine(LoggerWrapper.logMessage("Effective replaceRegex replaceStr= " + replaceStr));
 
 					newContent = content.replaceAll(searchStr, replaceStr);
+					LOGGER.fine(LoggerWrapper.logMessage("Password update in content complete"));
 					if (EXTENDED_DEBUG)
 						LOGGER.fine(LoggerWrapper.logMessage("newContent: " + newContent));
 				} else {
@@ -413,6 +420,7 @@ public class ConfigFile {
 				 * save newContent to tmpFilename.
 				 * if remote, copy file
 				 */
+				
 				Files.write(Paths.get(tmpFilename), newContent.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 
 				if (LOCATION_REMOTEWINDOWS.equals(this.location) || LOCATION_REMOTEUNIX.equals(this.location)) {
@@ -442,5 +450,4 @@ public class ConfigFile {
 			}
 		}
 	}
-
 }
