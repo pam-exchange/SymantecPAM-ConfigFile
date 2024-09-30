@@ -46,14 +46,6 @@
 					"required": false
 	            }, {
                     "type": "TEXT",
-                    "field": "domain",
-                    "label": "Domain for login account",
-                    "required": false,
-                    "maxLength": 64,
-                    "patternConstraint": "^[A-Za-z0-9.-_]+$",
-                    "patternConstraintMessage": "Domain name must consists of letters, numbers, '.', '-' or '_' only"
-                }, {
-                    "type": "TEXT",
                     "field": "filename",
                     "label": "Config file (path+) filename",
                     "required": true,
