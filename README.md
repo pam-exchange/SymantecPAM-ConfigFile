@@ -75,11 +75,14 @@ file is not escaped.
 
 The fields used are:
 
-- Location of config file    
+- Location of keystore file  
+API/CLI field: `location`  
 This can be `Remote UNIX`, `Remote Windows` or `Local TCF`. Set the radio button
 accordingly.
 
-- Port (for Remote UNIX)  
+
+- Port (for Remote UNIX) 
+API/CLI field: `port`   
 This is the port used when establishing an SSH connection to a remote UNIX server.
 
 
@@ -92,17 +95,14 @@ is an account configured in PAM. It can be a domain or local account.
 
 The fields used are:
 
-- Login account to remote server  
+API/CLI field name: `loginAccount`  
+Valid value is the internal ID for an account defined in PAM.  
 If the application uses a remote Windows or UNIX system, select an account with
 login permissions to the remote server. The account must have read/write permissions
-to the file specified.
-
-- Domain for login account  
-If the login account requires a domain for SMB and SSH connections, enter it here.
-This may also apply to local accounts. When using a local account on a Windows server
-the domain is the **hostname**.
+to the configuration path and filename.
 
 - Config file (path+) filename    
+API/CLI field name: `filename`  
 Specify the path + filename for the configuration file.
 For Windows servers the protocol used is SMB and you must specify a share/path to the file.
 This can be `c$/tmp/tomcat-users.xml` or any other network share on the server.
@@ -112,25 +112,33 @@ For files on the local TCF server, specify the path+filename. The account runnin
 must have read/write permissions to the path and file.
 
 - Create backup file    
-If this is checked a backup of the configuration file is created. The login account
+API/CLI field name: `createBackup`  
+Valid values are `true` and `false`  
+If this is checked a backup of the keystore file is created. The login account
 must have permissions to create a new file in the path for the configuration file.
 
+
 - Use Regex for verify/update    
+API/CLI field name: `useRegex`  
+Valid values are `true` and `false`  
 This will enable use of regex in verify, search and replace of password in the configuration
 file. If this is not enabled a simple text search for the current password is used. The password
 update will search for the current password (exact match) and replace it with a new password.
 
 - Verify regex    
+API/CLI field name: `verifyRegex`  
 This is the regex used to verify if the configuration file has the correct password.
 The username of the account is specified as `$USERNAME$` (upper case). The password of the
 account is specified as `$PASSWORD$` (upper case). Both will be replaces with the account
 username and current password.
 
 - Update regex (search)    
+API/CLI field name: `searchRegex`  
 This is the regex used with identifying where in the configuration file the username/password
 is to be found. Use `()` to group the search. They are used in the replace regex.
 
 - Update regex (replace)    
+API/CLI field name: `replaceRegex`  
 This is the regex used when replacing the password. It uses the groups found in the search
 regex. Groups are referenced as `$1`, `$2`, etc.
 The username of the account is specified as `$USERNAME$` (upper case). The password of the
