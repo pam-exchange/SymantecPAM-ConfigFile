@@ -33,7 +33,6 @@ public class ConfigFile {
 
 	private static final String FIELD_LOCATION = "location";
 	private static final String FIELD_PORT = "port";
-	private static final String FIELD_DOMAIN = "domain";
 	private static final String FIELD_LOGINACCOUNT = "loginAccount";
 	private static final String FIELD_FILENAME = "filename";
 	private static final String FIELD_CREATEBACKUP = "createBackup";
@@ -107,7 +106,7 @@ public class ConfigFile {
 			} else {
 				this.domain= this.hostname;
 			}
-			LOGGER.fine(LoggerWrapper.logMessage(FIELD_DOMAIN + "= '" + this.domain+"'"));
+			LOGGER.fine(LoggerWrapper.logMessage("Domain= '" + this.domain+"'"));
 			
 			/*
 			 * login username from loginAccount
